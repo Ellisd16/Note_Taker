@@ -1,0 +1,55 @@
+const express = require("express");
+const path = require("path");
+const fs = require("fs")
+
+// Setting up the Express App
+
+const app = express();
+const PORT = 3000;
+
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+//We need 5 routes for this app (2 HTML routes, 3 API routes)
+
+//Routes
+//===============================
+
+app.get("/notes", (req, res) => {
+    res.sendFile(path.join(__dirname, "/public/notes.html"))
+});
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "/public/index.html"))
+});
+
+
+
+//How do i call on the database from here?
+//Using the file directory to call the database
+
+//This will return all the notes
+app.get("/api/notes", (req, res) => {
+    res.sendFile(path.join(__dirname, "/db/db.json"));
+    console.log("Here are all of the current notes!");
+});
+
+//This will receive new notes and add them to the db.json file
+app.post("/api/notes", (req, res) => {
+    fs.readFile("/db/db.json", (err, data) => {
+        if (err) throw err;
+        let newNote = JSON.parse(data);
+    })
+});
+
+
+//This will allow us to delete notes
+app.delete("/api/notes/:id", (req, res) => {
+
+});
+
+
+app.listen(PORT, () => {
+    console.log("App listening on PORT " + PORT);
+});
