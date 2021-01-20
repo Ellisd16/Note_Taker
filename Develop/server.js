@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
-const fs = require("fs")
+const fs = require("fs");
+const { notStrictEqual } = require("assert");
 
 // Setting up the Express App
 
@@ -16,40 +17,52 @@ app.use(express.json());
 //Routes
 //===============================
 
-app.get("/notes", (req, res) => {
-    res.sendFile(path.join(__dirname, "/public/notes.html"))
-});
+fs.readFile("db/db.json", (err, data) => {
+    if (err) throw err;
 
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "/public/index.html"))
-});
+    const notes = JSON.parse(data)
 
+    app.get("/notes", (req, res) => {
+        res.sendFile(path.join(__dirname, "/public/notes.html"))
+    });
 
-
-//How do i call on the database from here?
-//Using the file directory to call the database
-
-//This will return all the notes
-app.get("/api/notes", (req, res) => {
-    res.sendFile(path.join(__dirname, "/db/db.json"));
-    console.log("Here are all of the current notes!");
-});
-
-//This will receive new notes and add them to the db.json file
-app.post("/api/notes", (req, res) => {
-    fs.readFile("/db/db.json", (err, data) => {
-        if (err) throw err;
-        let newNote = JSON.parse(data);
-    })
-});
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "/public/index.html"))
+    });
 
 
-//This will allow us to delete notes
-app.delete("/api/notes/:id", (req, res) => {
 
-});
+    //How do i call on the database from here?
+    //Using the file directory to call the database
+
+    //This will return all the notes
+    app.get("/api/notes", (req, res) => {
+        res.sendFile(path.join(__dirname, "db/db.json"));
+        console.log("Here are all of the current notes!");
+    });
+
+    //This will receive new notes and add them to the db.json file
+    app.post("/api/notes", (req, res) => {
 
 
-app.listen(PORT, () => {
-    console.log("App listening on PORT " + PORT);
+        //Using fs.writeFile should add the data to the JSON, but i have to figure out how to get the data (or from where)
+
+        let newNote = req.body;
+        notes.push(newNote)
+
+        fs.writeFile("/db/db.json", JSON.stringify(notes));
+        console.log("Note was added! Mint Berrrrrryyy CRUNCH!")
+
+    });
+
+
+    //This will allow us to delete notes
+    app.delete("/api/notes/:id", (req, res) => {
+
+    });
+
+
+    app.listen(PORT, () => {
+        console.log("App listening on PORT " + PORT);
+    });
 });
