@@ -17,6 +17,7 @@ app.use(express.json());
 //Routes
 //===============================
 
+//fs readFile will allow all the routes to have access to the json
 fs.readFile("db/db.json", (err, data) => {
     if (err) throw err;
 
@@ -50,14 +51,28 @@ fs.readFile("db/db.json", (err, data) => {
         let newNote = req.body;
         notes.push(newNote)
 
-        fs.writeFile("/db/db.json", JSON.stringify(notes));
+        fs.writeFile("db/db.json", JSON.stringify(notes));
         console.log("Note was added! Mint Berrrrrryyy CRUNCH!")
 
     });
 
+    //How to do i give the notes a specific array?
+
+    //I think i might need a another route
+
+    app.get("/api/notes/:id", (req, res) => {
+        res.json(notes[req.params.id])
+    })
+
 
     //This will allow us to delete notes
     app.delete("/api/notes/:id", (req, res) => {
+        const id = req.params.id
+
+        //splice removes the contents of the array (the selected notes)
+        notes.splice(id, 1)
+        fs.writeFile("db/db.json", JSON.stringify(notes));
+        console.log("Note was deleted! ZoooWeeeMama!")
 
     });
 
