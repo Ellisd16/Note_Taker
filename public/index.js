@@ -4,6 +4,11 @@ const $saveNoteBtn = $(".save-note");
 const $newNoteBtn = $(".new-note");
 const $noteList = $(".list-container .list-group");
 
+
+console.log("please god make this work");
+
+
+
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
 
@@ -137,7 +142,9 @@ const renderNoteList = (notes) => {
 
 // Gets notes from the db and renders them to the sidebar
 const getAndRenderNotes = () => {
+  console.log("this file messed up");
   return getNotes().then(renderNoteList);
+
 };
 
 $saveNoteBtn.on("click", handleNoteSave);
@@ -149,3 +156,5 @@ $noteText.on("keyup", handleRenderSaveBtn);
 
 // Gets and renders the initial list of notes
 getAndRenderNotes();
+
+
