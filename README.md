@@ -7,7 +7,7 @@
 
 ## About
 
-I was tasked with making an app that would be able to save user notes, delete notes, and create new notes. The app runs on Heroku and utilizes MySQL to store the created notes. 
+I was tasked with making an app that would be able to save user notes, delete notes, and create new notes. The app runs on Heroku and utilizes Express to make the various API calls that it needs!
 
 ## Development
 
